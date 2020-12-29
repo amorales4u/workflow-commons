@@ -44,6 +44,11 @@ public class RemoteTaskService {
         }
     }
 
+    public TaskInstance getAll() {
+
+        return callStorageService(HttpMethod.GET,this.targetContext + "/task",null);
+    }
+
     public TaskInstance start(String path, Map<String,Object> data ) {
 
         return callStorageService(HttpMethod.POST,this.targetContext + "/task" + path,data);

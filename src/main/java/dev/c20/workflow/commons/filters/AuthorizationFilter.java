@@ -3,6 +3,7 @@ package dev.c20.workflow.commons.filters;
 import dev.c20.workflow.commons.CommonsConfig;
 import dev.c20.workflow.commons.tools.PathUtils;
 import dev.c20.workflow.commons.tools.StringUtils;
+import dev.c20.workflow.commons.tools.WFException;
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -14,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Map;
 
@@ -57,6 +59,17 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
         if( System.currentTimeMillis() > validTo )
             throw new RuntimeException("Token caduco");
+        HttpSession session =  httpServletRequest.getSession(true);
+        if( session.getAttribute("otp") != null ) {
+            String otp = (String)session.getAttribute("otp");
+            if( tokenData.get("otp").equals(otp) ) {
+                otp = StringUtils.randomString(5);
+                session.setAttribute("otp", otp);
+                tokenData.put("otp", otp);
+            } else {
+                throw  new RuntimeException("Token invalido");
+            }
+        }
 
         return StringUtils.getToken(tokenData);
     }

@@ -1,5 +1,7 @@
 package dev.c20.workflow.commons.wrapper.responses;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.c20.workflow.commons.wrapper.entities.Storage;
 
 import java.util.Map;
@@ -44,5 +46,27 @@ public class TaskInstance {
     public TaskInstance setData(Map<String, Object> data) {
         this.data = data;
         return this;
+    }
+
+    public TaskInstance setResponse(String data) {
+        if (data != null) {
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+
+                TaskInstance res = mapper.readValue(data, TaskInstance.class);
+
+                this.error = res.error;
+                this.errorDescription = res.errorDescription;
+                this.data = res.data;
+                this.task = res.task;
+
+                return this;
+            } catch (Exception ex) {
+                this.error = -1;
+                this.errorDescription = "Error al parsear el body:" + ex.getMessage();
+            }
+        }
+
+        return null;
     }
 }

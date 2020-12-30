@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Activity {
+
+    String path;
     String name;
     Long count = 0l;
     List<Activity> activities = new ArrayList<>();
@@ -17,6 +19,14 @@ public class Activity {
         return this;
     }
 
+    public String getPath() {
+        return path;
+    }
+
+    public Activity setPath(String path) {
+        this.path = path;
+        return this;
+    }
 
     public String getName() {
         return name;

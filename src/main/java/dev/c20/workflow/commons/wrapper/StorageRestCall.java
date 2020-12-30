@@ -34,6 +34,10 @@ public class StorageRestCall {
 
     }
 
+    public String getServer() {
+        return server;
+    }
+
     public StorageRestCall setWebContext(String webContext) {
         this.webContext = webContext;
         createRequest();

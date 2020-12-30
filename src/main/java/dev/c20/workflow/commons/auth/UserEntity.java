@@ -65,7 +65,7 @@ public class UserEntity {
 
     public List<String> getPermissionsList() {
         List<String> permissions = StringUtils.splitAsList(this.getRoles(),"," );
-        permissions.add(this.getName());
+        permissions.add(this.getUser());
 
         return permissions;
 

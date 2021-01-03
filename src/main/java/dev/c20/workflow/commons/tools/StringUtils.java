@@ -689,7 +689,7 @@ public class StringUtils {
             System.out.println("New Token valid to:" + validTo + " " + 5);
             user.put("validTo",  validTo );
             String userJSON = StringUtils.toJSON(user);
-            userJSON = StringUtils.encrypt(userJSON, "token ");
+            userJSON = StringUtils.encrypt(userJSON, CommonsConfig.TOKEN_KEY);
             return userJSON;
         } catch( Exception ex ) {
             return null;

@@ -45,7 +45,6 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
     public String revalidateToken(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
         String token = httpServletRequest.getHeader(CommonsConfig.HEADER_AUTHORIZATION);
-
         if( token == null || token.equals(""))
             throw new RuntimeException("No se recibio el Token");
 
@@ -59,18 +58,26 @@ public class AuthorizationFilter extends OncePerRequestFilter {
 
         if( System.currentTimeMillis() > validTo )
             throw new RuntimeException("Token caduco");
-        HttpSession session =  httpServletRequest.getSession(true);
-        if( session.getAttribute("otp") != null ) {
-            String otp = (String)session.getAttribute("otp");
-            if( tokenData.get("otp").equals(otp) ) {
+        HttpSession session =  httpServletRequest.getSession();
+        System.out.println("*** Set OTP");
+        String otp = (String)session.getAttribute("otp");
+        if( otp == null ) {
+            otp = StringUtils.randomString(5);
+            session.setAttribute("otp", otp);
+            tokenData.put("otp", otp);
+            System.out.println("Set first OTP " + otp);
+        } else {
+            if( tokenData.get("otp") != null && ((String)tokenData.get("otp")).equals(otp) ) {
                 otp = StringUtils.randomString(5);
                 session.setAttribute("otp", otp);
                 tokenData.put("otp", otp);
+                System.out.println("Renew OTP");
             } else {
-                throw  new RuntimeException("Token invalido");
+                throw new RuntimeException("Token OTP invalido");
             }
-        }
 
+        }
+        System.out.println("Check OTP:" + otp + " in token:" + tokenData.get("otp"));
         return StringUtils.getToken(tokenData);
     }
 
@@ -81,7 +88,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
                 return true;
         }
         */
-        return true;
+        return false;
 
     }
 }

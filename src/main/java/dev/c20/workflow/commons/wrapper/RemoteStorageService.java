@@ -14,7 +14,8 @@ public class RemoteStorageService {
     @Autowired
     StorageRestCall storageRestCall;
 
-    String targetContext;
+    String targetContext; // ejem: workflow
+    String serviceContext; // ejem: storage or task
     String auth;
 
     public void init(String server, String targetContext, String auth) {
@@ -26,10 +27,15 @@ public class RemoteStorageService {
     public void callStorageService(HttpMethod httpMethod, String path, Object body) {
         storageRestCall
                 .setHttpMethod(httpMethod)
-                .setWebContext(this.targetContext + path)
+                .setWebContext(this.targetContext + "/storage" + path)
                 .setHeader("Authorization",auth)
                 .setBody(body)
                 .send();
+    }
+
+    public ObjectResponse<Storage> createTree(String path, Storage storage ) {
+        callStorageService(HttpMethod.POST,"/tree" + path,storage);
+        return (new ObjectResponse<Storage>()).setResponse(storageRestCall.response);
     }
 
     public ObjectResponse<Storage> createFolder(String path, Storage storage ) {

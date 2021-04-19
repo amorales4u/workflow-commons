@@ -1,8 +1,29 @@
 package dev.c20.workflow.commons.tools;
 
-public class PathUtils {
+public class StoragePathUtil {
+    
+    private String resource;
+    private boolean findFile = false;
+    private boolean findFolder = false;
 
-    static public boolean isFolder(String resource) {
+    public String getPath() {
+        return this.resource;
+    }
+
+    public String getPathDbLIKE() {
+        return this.resource + "%";
+    }
+
+    public StoragePathUtil setPath(String path) {
+        this.resource = path;
+        return this;
+    }
+    
+    public StoragePathUtil(String path) {
+        this.resource = path;
+    }
+
+    public boolean isFolder() {
 
         if( StringUtils.isEmpty(resource) ) {
             return false;
@@ -10,7 +31,7 @@ public class PathUtils {
         return resource.endsWith("/");
     }
 
-    static public boolean isFile(String resource) {
+    public boolean isFile() {
 
         if( StringUtils.isEmpty(resource) ) {
             return false;
@@ -18,7 +39,7 @@ public class PathUtils {
         return !resource.endsWith("/");
     }
 
-    static public String getName(String resource) {
+    public String getName() {
 
         if ("/".equals( resource)) {
             return "/";
@@ -29,12 +50,12 @@ public class PathUtils {
         return parent.substring(parent.lastIndexOf('/') + 1);
     }
 
-    static public String getExtension(String resource) {
+    public String getExtension() {
 
-        if( isFolder(resource) ) {
+        if( isFolder() ) {
             return null;
         }
-        String name = getName(resource);
+        String name = getName();
 
         if( name.indexOf(".") == -1 ) {
             return null;
@@ -43,12 +64,12 @@ public class PathUtils {
         return name.substring(name.indexOf(".")+1);
     }
 
-    static public String getFolderPath(String resource) {
+    public String getFolderPath() {
 
         return resource.substring(0, resource.lastIndexOf('/') + 1);
     }
 
-    static public String getParentFolder(String resource) {
+    public String getParentFolder() {
 
         if ( StringUtils.isEmptyOrWhitespaceOnly(resource) || resource == "/" ) {
             return null;
@@ -59,7 +80,7 @@ public class PathUtils {
         return parent.substring(0, parent.lastIndexOf('/') + 1);
     }
 
-    static public int getPathLevel(String resource) {
+    public int getPathLevel() {
 
         int level = -1;
         int pos = 0;
@@ -73,17 +94,17 @@ public class PathUtils {
         return level;
     }
 
-    static public String getPathFromLevel(String resource, int level) {
-        String result = getPathPart(resource,level-1);
+    public String getPathFromLevel( int level) {
+        String result = getPathPart(level-1);
         return "/" + resource.substring(result.length());
     }
-    static public String getPathNameFromLevel(String resource, int level) {
-        return PathUtils.splitPath(resource)[level];
+    public String getPathNameFromLevel( int level) {
+        return splitPath()[level];
     }
 
-    static public String getPathPart(String resource, int level) {
+    public String getPathPart(int level) {
 
-        resource = getFolderPath(resource);
+        resource = getFolderPath();
         String result = null;
         int pos = 0, count = 0;
         if (level >= 0) {
@@ -110,7 +131,7 @@ public class PathUtils {
         return result;
     }
 
-    static public String[] splitPath( String resource ) {
+    public String[] splitPath(  ) {
         if( StringUtils.isEmpty(resource) ) {
             return null;
         }
@@ -122,23 +143,22 @@ public class PathUtils {
         return resource.split("/");
     }
 
-    public static void main(String[] args)  {
-        String path = "/workflow/storage/file/asasas";
-        System.out.println(path);
-        System.out.println(getPathFromLevel(path,4));
-        System.out.println(getName(getPathFromLevel(path,4)));
-        // path level: /0/1/
-        path = "/Workflows/";
-        System.out.println(path);
-        System.out.println(getParentFolder( path));
-        System.out.println(getPathLevel( path));
 
-        path = "/Workflows/EUC-27/";
-        System.out.println(path);
-        System.out.println(getName(path));
-        System.out.println(getPathLevel( path));
-        System.out.println(getParentFolder( path));
-
+    public boolean isFindFolder() {
+        return findFolder;
     }
 
+    public StoragePathUtil setFindFolder(boolean findFolder) {
+        this.findFolder = findFolder;
+        return this;
+    }
+
+    public boolean isFindFile() {
+        return findFile;
+    }
+
+    public StoragePathUtil setFindFile(boolean findFile) {
+        this.findFile = findFile;
+        return this;
+    }
 }

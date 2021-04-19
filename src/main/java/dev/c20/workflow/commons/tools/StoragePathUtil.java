@@ -1,10 +1,12 @@
 package dev.c20.workflow.commons.tools;
 
-public class StoragePathUtil {
+import java.io.Serializable;
+
+public class StoragePathUtil implements Serializable  {
     
     private String resource;
-    private boolean findFile = false;
-    private boolean findFolder = false;
+    private boolean findFile = true;
+    private boolean findFolder = true;
 
     public String getPath() {
         return this.resource;
@@ -16,12 +18,21 @@ public class StoragePathUtil {
 
     public StoragePathUtil setPath(String path) {
         this.resource = path;
+        this.maxLevel = this.getPathLevel();
         return this;
     }
-    
+
+    public StoragePathUtil() {
+    }
+
     public StoragePathUtil(String path) {
         this.resource = path;
     }
+
+    private Boolean showFolders = true ;
+    private Boolean showFiles = true;
+
+    private int maxLevel = 0;
 
     public boolean isFolder() {
 
@@ -29,6 +40,19 @@ public class StoragePathUtil {
             return false;
         }
         return resource.endsWith("/");
+    }
+
+    public int getLevel() {
+        return this.getPathLevel();
+    }
+
+    public StoragePathUtil setRecursive( boolean recursive) {
+        if( recursive ) {
+            maxLevel = 10000;
+        } else {
+            maxLevel = this.getPathLevel();
+        }
+        return this;
     }
 
     public boolean isFile() {
@@ -159,6 +183,33 @@ public class StoragePathUtil {
 
     public StoragePathUtil setFindFile(boolean findFile) {
         this.findFile = findFile;
+        return this;
+    }
+
+    public Boolean getShowFolders() {
+        return showFolders;
+    }
+
+    public StoragePathUtil setShowFolders(Boolean showFolders) {
+        this.showFolders = showFolders;
+        return this;
+    }
+
+    public Boolean getShowFiles() {
+        return showFiles;
+    }
+
+    public StoragePathUtil setShowFiles(Boolean showFiles) {
+        this.showFiles = showFiles;
+        return this;
+    }
+
+    public int getMaxLevel() {
+        return maxLevel;
+    }
+
+    public StoragePathUtil setMaxLevel(int maxLevel) {
+        this.maxLevel = maxLevel;
         return this;
     }
 }

@@ -24,9 +24,9 @@ public class PathUtils {
             return "/";
         }
         // remove the last char, for a folder this will be "/", for a file it does not matter
-        String parent = (resource.substring(0, resource.length() - 1));
+        String parent = resource.endsWith("/") ? resource.substring(0, resource.length() - 1) : resource;
         // now as the name does not end with "/", check for the last "/" which is the parent folder name
-        return parent.substring(parent.lastIndexOf('/') + 1);
+        return parent.substring(parent.lastIndexOf('/') +1);
     }
 
     static public String getExtension(String resource) {
@@ -125,11 +125,13 @@ public class PathUtils {
     public static void main(String[] args)  {
         String path = "/workflow/storage/file/asasas";
         System.out.println(path);
+        System.out.println(getName(path));
         System.out.println(getPathFromLevel(path,4));
         System.out.println(getName(getPathFromLevel(path,4)));
         // path level: /0/1/
         path = "/Workflows/";
         System.out.println(path);
+        System.out.println(getName(path));
         System.out.println(getParentFolder( path));
         System.out.println(getPathLevel( path));
 

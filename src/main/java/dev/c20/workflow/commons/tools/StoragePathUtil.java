@@ -8,6 +8,17 @@ public class StoragePathUtil implements Serializable  {
     private boolean findFile = true;
     private boolean findFolder = true;
 
+    public String getImage() {
+        return image;
+    }
+
+    public StoragePathUtil setImage(String image) {
+        this.image = image;
+        return this;
+    }
+
+    private String image = null;
+
     public String getPath() {
         return this.resource;
     }

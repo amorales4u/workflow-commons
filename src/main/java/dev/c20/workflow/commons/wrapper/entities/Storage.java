@@ -51,8 +51,6 @@ public class Storage implements Serializable {
 
     private Boolean restrictedByPerm = false;
 
-    private Boolean childrenRestrictedByPerm = false;
-
     private Integer status;
 
     private String clazzName;
@@ -146,14 +144,6 @@ public class Storage implements Serializable {
         return this;
     }
 
-    public Boolean getChildrenRestrictedByPerm() {
-        return childrenRestrictedByPerm;
-    }
-
-    public Storage setChildrenRestrictedByPerm(Boolean childrenRestrictedByRole) {
-        this.childrenRestrictedByPerm = childrenRestrictedByRole;
-        return this;
-    }
 
     public Integer getStatus() {
         return status;
@@ -343,7 +333,6 @@ public class Storage implements Serializable {
         return this.setAssigned(source.assigned)
                 .setExtension(source.extension)
                 .setDescription(source.description)
-                .setChildrenRestrictedByPerm(source.childrenRestrictedByPerm)
                 .setClazzName(source.clazzName)
                 .setImage(source.image)
                 .setLocked(source.locked)
